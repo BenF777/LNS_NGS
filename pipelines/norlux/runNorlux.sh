@@ -46,7 +46,7 @@ mkdir -p $BAM_PATH
 #Generate FASTQ files
 echo "Convert Bcl To Fastq"
 bash $SCRIPT_PATH/bcl/convertBclToFastq.sh $RUN_PATH
-#wait
+wait
 
 mv $FASTQ_PATH/* $FASTQ_DEMUX/
 
@@ -54,18 +54,19 @@ mv $FASTQ_PATH/* $FASTQ_DEMUX/
 echo "TRIMMER"
 find $FASTQ_DEMUX -name "*R1*.fastq.gz" | grep -v I1 | grep -v Undetermined | grep -v trimmed | sort | parallel -P$DNA_PARALLEL_ALIGNMENT -n1 bash $SCRIPT_PATH/qc/fastxTrimmer_bothSites.sh $CONFIG_FILE $TRIMMER_LEFT $TRIMMER_RIGHT $FASTQ_DEMUX
 find $FASTQ_DEMUX -name "*R2*.fastq.gz" | grep -v I1 | grep -v Undetermined | grep -v trimmed | sort | parallel -P$DNA_PARALLEL_ALIGNMENT -n1 bash $SCRIPT_PATH/qc/fastxTrimmer_bothSites.sh $CONFIG_FILE $TRIMMER_LEFT $TRIMMER_RIGHT $FASTQ_DEMUX
-#wait
+wait
 
 #Perform a Quality Control on FASTQ files
 echo "FASTQC"
 time bash $SCRIPT_PATH/qc/generateFastqc.sh $CONFIG_FILE $RUN_PATH &
-#wait
+wait
 
 #Align reads to reference genome (hg19)
 echo "ALIGNMENT"
 SCRIPT="bash $SCRIPT_PATH/dna/bwaAllignmentPairedRead.sh $CONFIG_FILE $BAM_PATH $LOG_PATH $RUN_ID"
 
 find $FASTQ_DEMUX -name "*trimmed.fastq.gz" | grep -v I1 | grep -v Undetermined | sort | parallel -P $DNA_PARALLEL_ALIGNMENT -n2 $SCRIPT
+wait
 
 echo "CNV"
 mkdir -p $CNV_PATH
