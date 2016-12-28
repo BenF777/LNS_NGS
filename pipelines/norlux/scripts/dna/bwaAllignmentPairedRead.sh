@@ -18,7 +18,7 @@ IFS='_' read -ra FILE_NAME_COMP <<< "$FILE_NAME"
 SAMPLE_ID=${FILE_NAME_COMP[0]}
 LANE_ID=${FILE_NAME_COMP[2]}
 
-RUN_GROUP_HEADER="@RG\tID:${RUN_ID}_${LANE_ID}\tLB:Lib01\tSM:${SAMPLE_ID}\tPL:ILLUMINA"
+RUN_GROUP_HEADER="@RG\tID:${RUN_ID}\tLB:Lib01\tSM:${SAMPLE_ID}\tPL:ILLUMINA"
 
 RESULT_FILENAME=${SAMPLE_ID}_aligned
 
@@ -40,9 +40,7 @@ REFERENCE=${INDEX_PREFIX}/ucsc.hg19.fa
 
 alnThreadOptions=$DNA_BWA_MEM_PARALLEL
 
-#baseBWACall="${BWA_BINARY} mem -t ${alnThreadOptions} -R ${RUN_GROUP_HEADER} ${REFERENCE}"
-
-baseBWACall="${BWA_BINARY} mem -t ${alnThreadOptions} -M ${REFERENCE}"
+baseBWACall="${BWA_BINARY} mem -t ${alnThreadOptions} -R ${RUN_GROUP_HEADER} -M ${REFERENCE}"
 
 echo "bwacall $baseBWACall $RAW_SEQ_1 $RAW_SEQ_2 $INDEX_SEQ"
 

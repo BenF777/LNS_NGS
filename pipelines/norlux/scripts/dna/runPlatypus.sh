@@ -13,9 +13,9 @@ echo $BAM_FILE
 OUT=$OUT_PATH/$(basename $BAM_FILE)
 OUT=${OUT%_MERGED.bam}
 OUT=${OUT}_PLATYPUS
-REFERENCE=/home/benflies/sequencing/reference/hg19/ucsc.hg19.fa
+REFERENCE=/home/benflies/NGS/references/hg19/ucsc.hg19.fa
 
-python $PLATYPUS_BINARY callVariants --bamFiles=$BAM_FILE --refFile=$REFERENCE --output=$OUT.vcf --filterDuplicates=0 --nCPU=$DNA_PARALLEL_ALIGNMENT --genSNPs 0 --genIndels 1 --logFileName=$OUT.log
+python $PLATYPUS_BINARY callVariants --bamFiles=$BAM_FILE --refFile=/home/benflies/NGS/references/hg19/ucsc.hg19.fa --output=$OUT.vcf --filterDuplicates=0 --nCPU=$DNA_PARALLEL_ALIGNMENT --genSNPs 0 --genIndels 1 --logFileName=$OUT.log
 #bcftools view ${OUT}.bcf > ${OUT}.vcf
 bgzip -c $OUT.vcf > $OUT.vcf.gz
 tabix -p vcf $OUT.vcf.gz
